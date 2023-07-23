@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { PictureOutlined } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
+import { Link, useNavigate } from 'react-router-dom'
 import { Menu } from 'antd'
 import { useAtom } from 'jotai'
 import { currentPageAtom } from '@renderer/store'
@@ -32,10 +33,11 @@ const items: MenuItem[] = [
 
 export default function Navbar({}: Props) {
   const [currentPage, setCurrentPage] = useAtom(currentPageAtom)
+  const navigate = useNavigate()
 
   const onClick: MenuProps['onClick'] = (e) => {
-    console.log('click ', e.key)
     setCurrentPage(e.key as TPageRoute)
+    navigate(`/` + e.key)
   }
   console.log('currentPage', currentPage)
   return (
