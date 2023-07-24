@@ -1,5 +1,5 @@
 # TODO
 
-- router
-- jotai
-- side menu
+- 图像超分、修复
+- 抠图
+- 免费 AI 对话
