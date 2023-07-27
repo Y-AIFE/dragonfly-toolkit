@@ -24,10 +24,6 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   rules: {
-    '@typescript-eslint/ban-ts-comment': [
-      'error',
-      { 'ts-ignore': 'allow-with-description' },
-    ],
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-empty-function': [
@@ -39,6 +35,7 @@ module.exports = {
     '@typescript-eslint/no-var-requires': 'off',
     'no-empty-pattern': 'off',
     '@typescript-eslint/ban-types': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
   },
   overrides: [
     {
