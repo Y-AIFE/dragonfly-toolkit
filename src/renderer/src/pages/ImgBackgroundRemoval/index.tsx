@@ -3,6 +3,7 @@ import imglyRemoveBackground, { Config } from '@imgly/background-removal'
 import { Spin, Button, Upload } from 'antd'
 import { InboxOutlined, CloseOutlined } from '@ant-design/icons'
 import classnames from 'classnames'
+import ImgComparator from '@renderer/components/common/ImgComparator'
 import OverLay from './components/OverLay'
 import type { UploadChangeParam } from 'antd/lib/upload'
 
@@ -85,6 +86,34 @@ export default function ImgBackgroundRemoval({}: Props) {
     overLayText = '处理中'
   }
 
+  const inner = (
+    <div
+      className={classnames(
+        'flex h-[100vh] w-[calc(100vw-200px)] items-center justify-center rounded-xl  px-[260px] py-6 pb-10 text-center transition-all',
+        showStep === 0 &&
+          'border border-dashed border-gray-300 hover:border-gray-600',
+      )}>
+      {showStep === 0 && (
+        <div>
+          <p className="text-[60px] text-primary">
+            <InboxOutlined />
+          </p>
+          <p className="text-[20px]">点击 或者 拖拽文件上传</p>
+        </div>
+      )}
+      {showStep === 1 && (
+        <img
+          src={sourceImgUrl}
+          alt="source"
+          className="max-h-full max-w-full object-contain"
+        />
+      )}
+      {showStep === 2 && (
+        <ImgComparator sourceUrl={sourceImgUrl} outputUrl={processedImgUrl} />
+      )}
+    </div>
+  )
+
   return (
     <div className="relative box-border h-full bg-white">
       {showStep !== 0 && (
@@ -94,42 +123,17 @@ export default function ImgBackgroundRemoval({}: Props) {
           <CloseOutlined />
         </div>
       )}
-      <Upload
-        name="file"
-        className={classnames({ 'pointer-events-none': showStep !== 0 })}
-        showUploadList={false}
-        beforeUpload={() => false} // 阻止自动上传
-        onChange={handleImgChange}>
-        <div
-          className={classnames(
-            'flex h-[100vh] w-[calc(100vw-200px)] cursor-pointer items-center justify-center rounded-xl  px-[260px] py-6 pb-10 text-center transition-all',
-            showStep === 0 &&
-              'border border-dashed border-gray-300 hover:border-gray-600',
-          )}>
-          {showStep === 0 && (
-            <div>
-              <p className="text-[60px] text-primary">
-                <InboxOutlined />
-              </p>
-              <p className="text-[20px]">点击 或者 拖拽文件上传</p>
-            </div>
-          )}
-          {showStep === 1 && (
-            <img
-              src={sourceImgUrl}
-              alt="source"
-              className="max-h-full max-w-full object-contain"
-            />
-          )}
-          {showStep === 2 && (
-            <img
-              src={processedImgUrl}
-              alt="processed"
-              className="max-h-full max-w-full object-contain"
-            />
-          )}
-        </div>
-      </Upload>
+      {showStep === 0 ? (
+        <Upload
+          name="file"
+          showUploadList={false}
+          beforeUpload={() => false} // 阻止自动上传
+          onChange={handleImgChange}>
+          {inner}
+        </Upload>
+      ) : (
+        <div>{inner}</div>
+      )}
       <div className="absolute bottom-5 right-5">
         <Button
           disabled={!sourceImg}
