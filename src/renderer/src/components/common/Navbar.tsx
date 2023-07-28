@@ -39,10 +39,10 @@ export default function Navbar({}: Props) {
     setCurrentPage(e.key as TPageRoute)
     navigate(`/` + e.key)
   }
-  console.log('currentPage', currentPage)
   return (
     <div className="w-[200px] bg-white">
       <Menu
+        className="h-full"
         onClick={onClick}
         mode="inline"
         style={{ width: 200 }}
