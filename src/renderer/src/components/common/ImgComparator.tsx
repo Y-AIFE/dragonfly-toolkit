@@ -23,7 +23,7 @@ export default function ImgComparator({ sourceUrl, outputUrl, pos }: Props) {
   pos = pos ?? 50
   const hasOutput = outputUrl.length > 0
 
-  const handleSourceImgLoad = () => {
+  const calcSourceImg = () => {
     const imgRect = (
       sourceImgRef.current as HTMLImageElement
     ).getBoundingClientRect()
@@ -31,7 +31,7 @@ export default function ImgComparator({ sourceUrl, outputUrl, pos }: Props) {
       sourceImgRef.current?.parentNode as HTMLDivElement
     ).getBoundingClientRect()
     setImagePos({ left: imgRect.left - wrapperRect.left, top: imgRect.top })
-    console.log('srcimgRect', imgRect)
+    console.log('srcImgRect', imgRect)
     setImageSize({ width: imgRect.width, height: imgRect.height })
   }
 
@@ -44,7 +44,6 @@ export default function ImgComparator({ sourceUrl, outputUrl, pos }: Props) {
     ).getBoundingClientRect()
     if (hasOutput) {
       const initDis = ((100 - (pos as number)) * imageSize.width) / 100
-      console.log('initDis', initDis)
       setCropWidth(initDis)
     }
     const handleDrag = (e) => {
@@ -53,7 +52,7 @@ export default function ImgComparator({ sourceUrl, outputUrl, pos }: Props) {
         Math.min(e.clientX - wrapperRect.left - imagePos.left, max),
       )
       const dis = imageSize.width - relativeDistance
-      console.log('dis', dis, e, imagePos)
+      // console.log('dis', dis, e, imagePos)
       setCropWidth(dis)
     }
     dragger?.addEventListener('mousedown', () => {
@@ -62,8 +61,10 @@ export default function ImgComparator({ sourceUrl, outputUrl, pos }: Props) {
     window.addEventListener('mouseup', () => {
       window.removeEventListener('mousemove', handleDrag)
     })
+    window.addEventListener('resize', calcSourceImg)
     return () => {
       window.removeEventListener('mousemove', handleDrag)
+      window.removeEventListener('resize', calcSourceImg)
     }
   }, [outputUrl, imageSize, imagePos, hasOutput])
   return (
@@ -75,7 +76,7 @@ export default function ImgComparator({ sourceUrl, outputUrl, pos }: Props) {
         className="pointer-events-none max-h-[calc(100%-20px)] max-w-[calc(100%-20px)] select-none object-contain"
         style={{ clipPath: `inset(0 ${cropWidth}px 0 0)` }}
         draggable={false}
-        onLoad={handleSourceImgLoad}
+        onLoad={calcSourceImg}
       />
       {hasOutput && (
         <img
