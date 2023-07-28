@@ -89,7 +89,7 @@ export default function ImgBackgroundRemoval({}: Props) {
   const inner = (
     <div
       className={classnames(
-        'flex h-[100vh] w-[calc(100vw-200px)] items-center justify-center rounded-xl  px-[260px] py-6 pb-10 text-center transition-all',
+        'flex h-[100vh] w-[calc(100vw-200px)] items-center justify-center rounded-xl text-center transition-all',
         showStep === 0 &&
           'border border-dashed border-gray-300 hover:border-gray-600',
       )}>
@@ -101,14 +101,7 @@ export default function ImgBackgroundRemoval({}: Props) {
           <p className="text-[20px]">点击 或者 拖拽文件上传</p>
         </div>
       )}
-      {showStep === 1 && (
-        <img
-          src={sourceImgUrl}
-          alt="source"
-          className="max-h-full max-w-full object-contain"
-        />
-      )}
-      {showStep === 2 && (
+      {showStep !== 0 && (
         <ImgComparator sourceUrl={sourceImgUrl} outputUrl={processedImgUrl} />
       )}
     </div>
@@ -118,7 +111,7 @@ export default function ImgBackgroundRemoval({}: Props) {
     <div className="relative box-border h-full bg-white">
       {showStep !== 0 && (
         <div
-          className="absolute right-4 top-4 flex cursor-pointer items-center justify-center rounded-full bg-gray-500 p-3 text-xl opacity-60 hover:opacity-100"
+          className="absolute right-4 top-4 z-10 flex cursor-pointer items-center justify-center rounded-full bg-gray-500 p-3 text-xl opacity-60 hover:opacity-100"
           onClick={handleReset}>
           <CloseOutlined />
         </div>
@@ -132,16 +125,14 @@ export default function ImgBackgroundRemoval({}: Props) {
           {inner}
         </Upload>
       ) : (
-        <div>{inner}</div>
+        inner
       )}
-      <div className="absolute bottom-5 right-5">
-        <Button
-          disabled={!sourceImg}
-          type="primary"
-          onClick={handleStartProcess}
-          size="large">
-          开始处理
-        </Button>
+      <div className="absolute bottom-5 right-5 z-20">
+        {showStep === 1 && (
+          <Button type="primary" onClick={handleStartProcess} size="large">
+            开始处理
+          </Button>
+        )}
         {showStep === 2 && (
           <Button
             type="default"
